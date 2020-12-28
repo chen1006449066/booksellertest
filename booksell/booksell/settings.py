@@ -82,10 +82,12 @@ DATABASES = {
         'PASSWORD': '', # 密码
         'HOST': '127.0.0.1', # HOST
         'POST': 3306, # 端口
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+            'charset': 'utf8mb4'
+        }
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 

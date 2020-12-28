@@ -24,14 +24,24 @@ class Bookmanager(models.Model):
 class Book(models.Model):
     Bisbn=models.PositiveIntegerField('ISBN',primary_key=True)
     Bname=models.CharField('书名',max_length=40)
+    Bnumber=models.PositiveIntegerField('数量',default=0)
     Bauthor=models.CharField('作者',max_length=40)
     Bprice=models.DecimalField('价格', max_digits=7, decimal_places=2)
     Bcategory=models.CharField('类别',max_length=10)#没有考虑多种类别的情况
     Bpublisher=models.CharField('出版社',max_length=30)
     Bpublisherdate=models.DateField('出版日期',null=True)#可空
     Bintroduction=models.TextField('简介')
+class Bookorder(models.Model):
+    Oid=models.PositiveIntegerField('订单号')#不会自己生成
+    Obook=models.ForeignKey('Book',related_name='Orderbook',on_delete=models.DO_NOTHING)
+    Ovip=models.ForeignKey('Vip',related_name='Ordervip',on_delete=models.DO_NOTHING)
+    Onumber=models.PositiveIntegerField('销售数量')
+    Oprice=models.DecimalField('单价',max_digits=7, decimal_places=2)
+    Odate=models.DateTimeField('购买时间',auto_now_add=True)
+    class Meta:
+        unique_together=("Oid","Obook")#双主键
 class Sellrecord(models.Model):
-    Sid=models.PositiveIntegerField('订单号')#不会自己生成
+    Sid=models.ForeignKey('Bookorder',related_name='Orderid',on_delete=models.DO_NOTHING)
     Sbook=models.ForeignKey('Book',related_name='Sellbook',on_delete=models.DO_NOTHING)
     Svip=models.ForeignKey('Vip',related_name='Sellvip',on_delete=models.DO_NOTHING)
     Snumber=models.PositiveIntegerField('销售数量')
